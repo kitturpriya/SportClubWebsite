@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><%= title %> - tutsmake.com</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body class="container mt-3">
+<% if (messages.error) { %>
+<p style="color:red"><%- messages.error %></p>
+<% } %>
+<% if (messages.success) { %>
+<p style="color:green"><%- messages.success %></p>
+<% } %>
+<h1 class="mb-3"><%= title %></h1>
+<form action="/update-password" method="post" name="form1">
+<input type="hidden" name="token" class="form-control" value="<%= token %>">
+<div class="form-group">
+<label for="exampleInputEmail1">Password</label>
+<input type="password" name="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="Please Enter New Password" value="">
+</div>
+<input type="submit" class="btn btn-primary" value="Update Password">
+</form>
+<script>
+window.addEventListener('load',function(){
+    
+    var pw = document.getElementById("password");
+    pw.addEventListener("input", (n) => {
+      const passval = n.currentTarget.value;
+      var pattern= /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+      if ( !passval.match(pattern) || pw.validity.valueMissing ) {
+        pw.setCustomValidity("Password must be 6 characters long and contain atleast 1 uppercase,1 digit & 1 special character.");
+        pw.reportValidity();
+      } else { pw.setCustomValidity(""); }
+    });
+
+   
+    });
+  
+</script>
+</body>
+</html>
