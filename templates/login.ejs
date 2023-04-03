@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <!--<title> Login and Registration Form in HTML & CSS | CodingLab </title>-->
+    <link rel="stylesheet" href="css/register.css" >
+    <title>Login/Register</title>
+    <!-- Fontawesome CDN Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+   </head>
+<body>
+  <div class="container">
+   
+    <input type="checkbox" id="flip">
+    <div class="cover">
+      <div class="front">
+        <img src="images/frontImg.jpg" alt="">
+        <div class="text">
+          <span class="text-1">Welcome to S&middot;P&middot;O&middot;R&middot;T!</span>
+          <span class="text-2">Sign in to continue</span>
+        </div>
+      </div>
+      <div class="back">
+        <img class="backImg" src="images/backImg.jpg" alt="">
+        <div class="text">
+          <span class="text-1">Let's get started!</span>
+          <span class="text-2">Complete miles of journey with one step</span>
+        </div>
+      </div>
+    </div>
+    <div class="forms">
+        <div class="form-content">
+          <div class="login-form">
+            <div class="title">Login</div>
+          <form id='login' >
+            <div class="input-boxes">
+              <div class="input-box">
+                <i class="fas fa-envelope"></i>
+                <input type="text" name="checkmail" id="checkmail" placeholder="Enter your email" required>
+              </div>
+              <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="checkpass" id="checkpw" placeholder="Enter your password" required>
+              </div>
+              <div class="text"><a href="/forgot-password">Forgot password?</a></div>
+              <div class="button input-box">
+                <input type="submit" value="Submit">
+              </div>
+              <div class="text sign-up-text">Don't have an account? <label for="flip">Signup now</label></div>
+            </div>
+        </form>
+      </div>
+        <div class="signup-form">
+          <div class="title">Signup</div>
+        <form id='register'>
+            <div class="input-boxes">
+              <div class="input-box">
+                <i class="fas fa-user"></i>
+                
+                <input type="text" id="name" name="name" placeholder="Enter your name*" pattern="[A-Za-z]{2,}" required  >
+               
+              </div>
+              <div class="input-box">
+                <i class="fas fa-envelope"></i>
+                
+                <input type="text" id="email"  name="mail" placeholder="Enter your email*" required >
+                
+              </div>
+              <div class="input-box">
+                <i class="fas fa-lock"></i>
+                
+                <input type="password" id="pw" name="password" placeholder="Enter your password*" required>
+             
+              </div>
+              <div class="input-box">
+                <i class="fas fa-lock"></i>
+                
+                <input type="password" id="pw1" name="password1" placeholder="Confirm your password*" required >
+                
+         
+              </div>
+              <div class="button input-box">
+                <input type="submit" value="Submit" >
+              </div>
+              <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
+            </div>
+          
+      </form>
+    </div>
+    </div>
+    </div>
+  </div>
+  <script>
+    $("#login").submit(function(e) {
+
+      e.preventDefault(); // avoid to execute the actual submit of the form.
+  
+      var form = $(this);
+      
+      
+      $.ajax({
+          type: "POST",
+          url: '/login',
+          data: form.serialize(), // serializes the form's elements.
+          success: function(data)
+          {
+            alert(data); // show response from the php script.
+            if(data=="Welcome! You have been logged in"){
+              location.reload();
+            }
+            
+          }
+      });
+      
+  });
+
+  $("#register").submit(function(e) {
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+    var form = $(this);
+    
+    
+    $.ajax({
+        type: "POST",
+        url: '/register',
+        data: form.serialize(), // serializes the form's elements.
+        success: function(data)
+        {
+          alert(data); // show response from the php script.
+          
+        }
+    });
+    
+});
+
+    window.addEventListener('load',function(){
+    var name = document.getElementById("name");
+    var mail = document.getElementById("email");
+    var pw = document.getElementById("pw");
+    var pw1 = document.getElementById("pw1");
+    var checkmail = document.getElementById("checkemail");
+    var checkpw = document.getElementById("checkpw");
+    
+    name.addEventListener("input", (n) => {
+      const nameval = n.currentTarget.value;
+      if ( nameval.length<2 || name.validity.valueMissing ) {
+        name.setCustomValidity("Name must be atleast 2 characters long.");
+        name.reportValidity();
+      } else { name.setCustomValidity(""); }
+    });
+
+    mail.addEventListener("input", (n) => {
+      const mailval = n.currentTarget.value;
+      var pattern= /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      if ( !mailval.match(pattern) || mail.validity.valueMissing ) {
+        mail.setCustomValidity("Mail must be valid.");
+        mail.reportValidity();
+      } else { mail.setCustomValidity(""); }
+    });
+
+    pw.addEventListener("input", (n) => {
+      const passval = n.currentTarget.value;
+      var pattern= /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+      if ( !passval.match(pattern) || pw.validity.valueMissing ) {
+        pw.setCustomValidity("Password must be 6 characters long and contain atleast 1 uppercase,1 digit & 1 special character.");
+        pw.reportValidity();
+      } else { pw.setCustomValidity(""); }
+    });
+
+    pw1.addEventListener("input", (n) => {
+      const confpassval = n.currentTarget.value;
+      if (confpassval!=pw.value ) {
+        pw1.setCustomValidity("Passwords must match.");
+        pw1.reportValidity();
+      } else { pw1.setCustomValidity(""); }
+    });
+  });
+  checkmail.addEventListener("input", (n) => {
+      const mailval = n.currentTarget.value;
+      var pattern= /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      if ( !mailval.match(pattern) || checkmail.validity.valueMissing ) {
+        checkmail.setCustomValidity("Mail must be valid.");
+        checkmail.reportValidity();
+      } else { checkmail.setCustomValidity(""); }
+    });
+
+    checkpw.addEventListener("input", (n) => {
+      const passval = n.currentTarget.value;
+      var pattern= /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+      if ( !passval.match(pattern) || checkpw.validity.valueMissing ) {
+        checkpw.setCustomValidity("Password must be 6 characters long and contain atleast 1 uppercase,1 digit & 1 special character.");
+        checkpw.reportValidity();
+      } else { checkpw.setCustomValidity(""); }
+    });
+    
+
+  
+    
+        
+         
+        
+</script>
+
+</body>
+</html>
